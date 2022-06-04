@@ -127,6 +127,8 @@ USE_TZ = True
 MEDIA_URL = '/styles/images/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'home/media/')
 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
