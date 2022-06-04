@@ -1,0 +1,101 @@
+{% extends 'main.html' %} {% load static %} {% block style %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'styles/category/category.css' %}"
+/>
+{% endblock style%}
+{% block title %}Category{% endblock title %} 
+{% block content %}
+<div>
+<div class="taskbar_category">
+  <select  class="form-select" style="width:15%;" name="type" select = "2" size = "1" onchange = "window.location.href =  this.value">
+    <option value="{% url 'category:category' 1 %}"
+      {% if choice == "1"%} selected = "selected" {%endif%}>Video</option>
+    <option value="{% url 'category:category' 2 %}" 
+      {% if choice == "2"%} selected = "selected" {%endif%}>Live TV</option>
+    <option value="{% url 'category:category' 3 %}"
+      {% if choice == "3"%} selected = "selected" {%endif%}>Radio</option>
+  </select>
+  <a type="button" href="{%url 'category:add' pk=choice%}" class="btn btn-dark" style="margin-left:10px;">NEW CATEGORY</a>
+  <div class="d-flex flex-row ms-auto" style="margin-right:2%">
+    <form action="{% url 'category:category' choice %}" method = "GET">
+      
+      <input class="input-group-text" type="text" name = "q" placeholder = "Search Category...."/>
+    </form>
+   
+  </div>
+</div>
+
+<div style="height: 90vh; overflow: hidden; margin-left:30px;">
+    <div class="row content_category" style = "height: 80vh; overflow-y:scroll">
+      {% for category in list_cats %}
+      <div
+        class="card"
+        style="
+          width: 20%;
+          height: 35%;
+          padding-left: 12px;
+          padding-right: 12px;
+          padding-top: 12px;
+          padding-bottom: 12px;
+          margin-left: 30px;
+          margin-bottom: 15px;
+        "
+      >
+        <div
+        style = "
+          height:100%;
+          position: relative;
+          overflow: hidden;
+        "
+        class="card-img-top">
+          <img  src="{{category.cat_image}}"
+          style = "
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            height: 100%;
+            min-width: 100%;
+            -webkit-transform: translate(-50%,-50%);
+                -ms-transform: translate(-50%,-50%);
+                    transform: translate(-50%,-50%);
+          " />
+        </div>
+        <div class="card-body" style="padding:5px;">
+          <h5 class="card-title">{{category.cat_name}}</h5>
+          <a href="{% url 'category:edit' pk=choice  id=category.cat_id %}" class="btn btn-primary btn-sm">Edit</a>
+          <a type="button" href = "{% url 'category:delcate'  pk=choice  id=category.cat_id %}" class=" {% if category.cat_status == 1 %}btn btn-primary btn-sm{% else %}btn btn-secondary btn-sm{% endif %} ">
+
+            {% if category.cat_status == 1%}
+                Disable
+            {%else%}
+                Enable
+            {%endif%}
+          </a>
+        
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="d-flex justify-content-center align-items-center" style="height: 8%">
+      <nav aria-label="Page navigation example " style="margin-top:10px;">
+        <ul class="pagination">
+          {% if list_cats.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{list_cats.previous_page_number}}">Previous</a></li>
+          {% endif %}
+          {% for i in nums %}
+          <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+          {% endfor %}
+          {% if list_cats.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{list_cats.next_page_number}}">Next</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{list_cats.paginator.num_pages}}">Last &raquo</a></li>
+          {% endif %}
+        </ul>
+      </nav>  
+    </div> 
+</div>
+
+
+{% endblock content %}

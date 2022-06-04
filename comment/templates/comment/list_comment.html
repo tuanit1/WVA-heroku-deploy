@@ -1,0 +1,121 @@
+{% extends 'main.html' %} 
+{% load static %} 
+{% block content %}
+<nav class="navbar bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold">{{video_title}}</a>
+    <form class="d-flex" role="search" method="GET" action="{% url 'comment:comment_main' video_id %}"> {% csrf_token %}
+      <input class="form-control me-2" type="search" name="tv_search_cmt" placeholder="Search or All" aria-label="Search">
+      <button class="btn btn-outline-success" name="btn_search_cmt" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+<div style = "overflow-y:scroll; height:82vh">
+<ol class="list-group list-group-numbered border border-primary">
+  <li class="list-group-item d-flex justify-content-between align-items-start">
+    <div class="ms-2 me-auto">
+      <div class="fw-bold">Video Category</div>
+      {{video_cat}}
+    </div>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-start">
+    <div class="ms-2 me-auto">
+      <div class="fw-bold">Video Views</div>
+      {{vid_view}}
+    </div>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-start">
+    <div class="ms-2 me-auto">
+      <div class="fw-bold">Total Comments</div>
+      {{total_comments}}
+    </div>
+  </li>
+</ol>
+
+<div>
+
+
+<div class="list-group border border-primary" style="margin-top: 20px">
+    {% for cmt in list_cmts %}
+  <li class="list-group-item ">
+    <div class="row g-3">
+      <div class="col-md-1 d-flex justify-content-center align-items-center">
+        <input
+          type="image"
+          class="icon_user"
+          src="{% static 'styles/images/user.png' %}"
+        />
+      </div>
+      <div class="col-md-11 ">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <h6 >{{cmt.uid}}</h6>
+          <p style="font-size:12px;">{{cmt.cmt_time}}</p>
+        </div>
+        <div class="d-flex w-100 justify-content-between align-items-center">
+            <p>{{cmt.cmt_text}}</p>
+            <input type="image" class="icon_report" src="{% static 'styles/images/delete.png' %}" data-bs-toggle="modal" data-bs-target="#mymodal{{cmt.cmt_id}}" class="icon_report" />
+          <div
+            class="modal fade"
+            id="mymodal{{cmt.cmt_id}}"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalCenterTitle"
+            aria-hidden="true"
+            
+          >
+            <div class="modal-dialog modal-dialog-centered" role="document" id="a{{cmt.cmt_id}}">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="b{{cmt.cmt_id}}">
+                    Are you sure you want to delete comment of user {{cmt.uid}} at {{cmt.cmt_time}} ?
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">{{cmt.cmt_text}} </div>
+                <div class="modal-footer">
+                  <form action="{% url 'comment:delete_comment' cmt.cmt_id %}"  method="POST"> {% csrf_token %}
+                  <button type="submit" class="btn btn-primary">Yes</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+       
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+
+
+
+</div>
+
+</div>
+
+</div>
+<nav aria-label="Page navigation example " style="margin-top: 10px;">
+  <ul class="pagination">
+    {% if list_cmts.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{list_cmts.previous_page_number}}">Previous</a></li>
+    {% endif %}
+    {% for i in nums %}
+    <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+    {% endfor %}
+    {% if list_cmts.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{list_cmts.next_page_number}}">Next</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{list_cmts.paginator.num_pages}}">Last &raquo</a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+{% endblock %}

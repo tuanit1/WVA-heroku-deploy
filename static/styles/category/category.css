@@ -1,0 +1,31 @@
+
+.taskbar_category{
+    height: 10vh;
+    display: flex;
+    align-items: center;
+}
+
+.content_category{
+    justify-content: flex-start;
+    height: 40%;
+    width: 100%;
+}
+
+.row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: 0px;
+    margin-top: 20px;
+    margin-left: 0px;
+}
+
+.choice-parent{
+    height: 100%;
+}
+
+.choice-cat{
+    width: 15%;
+    height: 100%;
+}

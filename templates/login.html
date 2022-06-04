@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            media="screen"
+            href="{% static 'styles/main.css' %}"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+            crossorigin="anonymous"
+        />
+    </head>
+    <body style="background-color: #f0f8ff">
+
+        
+        
+        <span class="login_container">
+            <img src="{% static 'styles/images/login.png' %}" alt="" style="width:20%; height:40%; align:center">
+            <div class="cardparent card">
+                
+                <div class="card-body">
+                    <div>
+                        
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="exampleInputUsername"
+                                    >Username</label
+                                >
+                                <input
+                                    type="text"
+                                    name="username"
+                                    class="form-control"
+                                    placeholder="Enter Username"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1"
+                                    >Password</label
+                                >
+                                <input
+                                    type="password"
+                                    name="password"
+                                    class="form-control"
+                                    id="exampleInputPassword1"
+                                    placeholder="Password"
+                                />
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                Login
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </span>
+    </body>
+</html>

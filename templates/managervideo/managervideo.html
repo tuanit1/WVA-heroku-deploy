@@ -1,0 +1,123 @@
+{% extends 'main.html' %} {% load static %} {% block style %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'styles/category/category.css' %}"
+/>
+{% endblock style%}
+{% block title %}Manager Video{% endblock title %} 
+{% block content %}
+<div>
+  <div class="taskbar_category" >
+    <select class="form-select" style="width:15%;" name="type" select = "2" size = "1" onchange = "window.location.href =  this.value">
+      <option value="{% url 'managervideo:managervideo' pk=1 cat=0%}"
+        {% if choice == "1"%} selected = "selected" {%endif%}>Video</option>
+      <option value="{% url 'managervideo:managervideo' pk=2 cat=0%}" 
+        {% if choice == "2"%} selected = "selected" {%endif%}>Live TV</option>
+      <option value="{% url 'managervideo:managervideo' pk=3 cat=0%}"
+        {% if choice == "3"%} selected = "selected" {%endif%}>Radio</optoion>
+    </select>
+    <select class="form-select" style="width:15%; margin-left:10px;" name="cate" select = "2" size = "1" onchange = "window.location.href =  this.value">
+      <option value="{% url 'managervideo:managervideo' pk=choice cat=0%}">All Category</option>
+      {% for category in categories %}
+
+        <option value="{% url 'managervideo:managervideo' pk=choice cat=category.cat_id%}"
+        {% if category.cat_id == cat  %} selected="selected"{% endif %}>{{category.cat_name}}</option>
+          
+      {% endfor %}
+    </select>
+    <a type="button b" style="margin-left:10px;"
+    {% if choice == "1"%} 
+      href="{% url 'videoapp:create' %}" 
+    {% else %}
+      href = "{% url 'managervideo:addvideo' pk=choice cat=cat%}"
+    {% endif %}
+    class="btn btn-dark">NEW VIDEO</a>
+    <div class="d-flex flex-row ms-auto" style="margin-right:2%">
+      <form action="{% url 'managervideo:managervideo' pk=choice cat=cat %}" method = "GET">
+        <input class="input-group-text" type="text" name = "q" placeholder = "Search Video...."/>
+      </form>
+    </div>
+  </div>
+
+  <div style="height: 90vh; margin-left:30px;" >
+    <div style = "height: 92%; overflow-y:scroll">
+      <div class="row content_category" >
+        {% for video in videos %}
+        <div
+          class="card"
+          style="
+            width: 20%;
+            height: 100%;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            margin-left: 30px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+          style = "
+            height:100%;
+            position: relative;
+            overflow: hidden;
+          "
+          class="card-img-top">
+            <img  src="{{video.vid_thumbnail}}" 
+            style = "
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              min-height: 100%;
+              width: 100%;
+              -webkit-transform: translate(-50%,-50%);
+                  -ms-transform: translate(-50%,-50%);
+                      transform: translate(-50%,-50%);
+            " />
+          </div>
+          <div class="card-body" style="padding:5px; margin-top:2px;">
+            <h5 class="card-title">{{video.vid_title}}</h5>
+            <a type="button"
+            {% if choice == "1"%} 
+              href="{% url 'videoapp:update' video.vid_id %}" 
+            {% else %}
+              href = "{% url 'managervideo:editvideo' pk=choice cat=cat id=video.vid_id%}"
+            {% endif %} class="btn btn-primary btn-sm">Edit</a>
+            <a type="button" href = "{% url 'managervideo:disablevideo' pk=choice cat=cat id=video.vid_id  %}" 
+              class=" {% if video.vid_status == 1 %}btn btn-primary btn-sm{% else %}btn btn-secondary btn-sm{% endif %} ">
+              {% if video.vid_status == 1%}
+                  Disable
+              {%else%}
+                  Enable
+              {%endif%}
+            </a>
+          
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center" style="height: 8%">
+      <nav aria-label="Page navigation example ">
+        <ul class="pagination">
+          {% if videos.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{videos.previous_page_number}}">Previous</a></li>
+          {% endif %}
+          {% for i in nums %}
+          <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+          {% endfor %}
+          {% if videos.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{videos.next_page_number}}">Next</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{videos.paginator.num_pages}}">Last &raquo</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+
+
+</div>
+{% endblock content %}

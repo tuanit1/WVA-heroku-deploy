@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="{% static 'styles/main.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      type="image/png"
+      media="screen"
+      href="{% static 'styles/images' %}"
+    />
+  <title>Document</title>
+</head>
+<body>
+  <nav class="navnhi nav bg-dark" >
+    <ul class="ulnhi ">
+      
+      <li class="nav-item">
+        <a class="nhi nav-link" href="{% url 'managervideo:managervideo' pk=1 cat=0%}">Manager</a>
+      </li>
+      <li class="nav-item">
+        <a class="nhi nav-link" href="{% url 'category:category' 1 %}">Category</a>
+      </li>
+      <li class="nav-item">
+        <a class="nhi nav-link" href="{% url 'report:report_home' 0%}">Report</a>
+      </li>
+      <li class="nav-item">
+        <a class="nhi nav-link" href="{% url 'comment:comment_home' 0%}">Comment</a>
+      </li>
+      <li class="nav-item">
+        <a class="nhi nav-link" href="https://console.firebase.google.com/u/0/project/watch-video-app-ffbc5/overview">User</a>
+      </li>
+      <li class="nav-item">
+        <a class="nhi nav-link" href="{% url 'settingweb:setting' 0%}">Setting</a>
+      </li>
+      <li class="nav-item">
+        <a class="nhi nav-link" href="{% url 'notification:send' %}">Push Notication</a>
+      </li>
+      <li class="nav-item">
+        <a class="nhi nav-link" href="{% url 'main:logout' %}">Logout</a>
+      </li>
+    </ul>
+  </nav>
+  
+</body>
+</html>
+
+

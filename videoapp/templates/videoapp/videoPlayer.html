@@ -1,0 +1,30 @@
+{% extends 'main.html' %} {% block content %}
+
+<div
+    class="d-flex flex-column h-100 align-items-center justify-content-center"
+>
+    <div class="w-75 card border-dark bg-light">
+        <p class="card-header h3 text-white bg-dark">VIDEO PLAYER</p>
+
+        {% if url == '' %}
+        <div class="p-5 d-flex align-items-center justify-content-center">
+            <h4>Please come from detail page to watch video!</h>
+        </div>
+        {% else %}
+        <video class="" controls autoplay="true">
+            <source src="{{url}}" type="video/mp4" />
+            Your browser does not support the video tag.
+        </video>
+        {% endif %}
+
+        <button
+            type="button"
+            class="btn btn-secondary rounded-0 btn-lg btn-block"
+            onClick="javascript:history.go(-1);"
+        >
+            Back
+        </button>
+    </div>
+</div>
+
+{% endblock content %}

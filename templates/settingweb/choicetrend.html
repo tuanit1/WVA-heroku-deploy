@@ -1,0 +1,94 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    Choice
+    {% if type == "1"%} VIDEO {%endif%}
+    {% if type == "2"%} TV {%endif%}
+    {% if type == "3"%} RADIO {%endif%} 
+    Trending
+{% endblock title %}
+
+{% block content %}
+<div>
+    <div class="input-group mt-3 mb-3">
+        <form action="{% url 'settingweb:choice' type=type%}" method = "GET" >
+          <input class="input-group-text" type="text" name = "q" placeholder = "Search...."/>
+        </form>
+
+       
+      </div>
+      <p class="card-header h2 text-white bg-dark">
+          Choose
+          {% if type == "1"%} VIDEO {%endif%}
+          {% if type == "2"%} TV {%endif%}
+          {% if type == "3"%} RADIO {%endif%} 
+          Trending
+      </p>    
+      
+<form method="post" action="{% url 'settingweb:choice' type%}" class="fw-bold p-4">
+    {% csrf_token %}
+     <div style = "right:0px;" >   
+        <input type="submit" class="btn btn-primary" value="Save"/>
+        <a type="button" href="{% url 'settingweb:setting' 1%}" class="btn btn-danger" value="Back">Back</a>
+    </div>    
+<div class="card border-dark bg-light my-1" style = "overflow-y:scroll; height:85vh">
+        <div class="row content_category" >
+        {% for video in videos %}
+            <div class="card mb-3" style="width: 45%;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            margin-left: 30px;
+            margin-bottom: 20px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <div
+                            style = "
+                            height:100px;
+                            position: relative;
+                            overflow: hidden;
+                            "
+                            class="card-img-top">
+                            <img  src="{{video.vid_thumbnail}}"
+                            style = "
+                                position: absolute;
+                                left: 50%;
+                                top: 50%;
+                                height: 100%;
+                                min-width: 100%;
+                                -webkit-transform: translate(-50%,-50%);
+                                    -ms-transform: translate(-50%,-50%);
+                                        transform: translate(-50%,-50%);
+                            " />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-body">
+                            <h5 class="card-title">{{video.vid_title}}</h5>
+                        </div>
+                    </div>
+                    <div  class="col-md-1">
+                        <div class="form-check" >
+                            <input name="list_trend" style = "width:30px; height:30px; right:0px;" class="form-check-input" type="checkbox" value="{{video.vid_id}}" id="check{{video.vid_id}}"
+                            {% for trend in list_trend %}
+                                {% if trend == video.vid_id %}
+                                    checked
+                                {% endif %}
+                            {% endfor %}>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+        
+
+
+    </div>
+    
+
+</form>
+</div>        
+{% endblock content %}

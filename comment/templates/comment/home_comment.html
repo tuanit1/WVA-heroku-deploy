@@ -1,0 +1,65 @@
+{% extends 'main.html' %} 
+{% load static %} 
+{% block content %} 
+<nav class="navbar bg-light" style="top: 1%;">
+  <div class="container-fluid">
+    <div class="dropdown">
+        <select class="choice-type btn  btn-dark" name="type" select = "4" size = "1" onchange = "window.location.href =  this.value">
+          <option value="{% url 'comment:comment_home' 0 %}"
+            {% if video_type == 0 %} selected = "selected" {% endif %}>All</option>
+          <option value="{% url 'comment:comment_home' 1 %}"
+            {% if video_type == 1 %} selected = "selected" {% endif %}>Video</option>
+          <option value="{% url 'comment:comment_home' 2 %}" 
+            {% if video_type == 2 %} selected = "selected" {% endif %}>Live TV</option>
+          <option value="{% url 'comment:comment_home' 3 %}"
+            {% if video_type == 3 %} selected = "selected" {% endif %}>Radio</optoion>
+        </select>
+      </div>
+    <form class="d-flex" role="search" method="GET" action="{% url 'comment:comment_home' video_type%}"> {% csrf_token %}
+      <input class="form-control me-2" type="search" placeholder="Search or All" aria-label="Search" name="tv_search_video">
+      <button class="btn btn-outline-success" type="submit" name="btn_search_video" style="margin-left:5px;">Search</button>
+    </form>
+  </div>
+</nav>
+<table class="table table_report" style = "overflow-y:scroll; height:75vh">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Video ID</th>
+      <th scope="col">Video Title</th>
+      <th scope="col">Total Comments</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  
+  
+  <tbody >
+    {% for x in list_vids %}
+    <tr>
+      <td>{{x.vid_id}}</td>
+      <td>{{x.vid_title}}</td>
+      <td>{{x.total_cmts}}</td>
+      <td>
+        <form action="{% url 'comment:comment_main' x.vid_id %}">
+          <input type="image" class="icon_report" src="{% static 'styles/images/more.png' %}" />
+        </form>
+      </td>
+    </tr>
+  </tbody>
+  {% endfor %} 
+</table>
+<nav aria-label="Page navigation example " style="margin-top: 10px;">
+  <ul class="pagination">
+    {% if list_vids.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{list_vids.previous_page_number}}">Previous</a></li>
+    {% endif %}
+    {% for i in nums %}
+    <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+    {% endfor %}
+    {% if list_vids.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{list_vids.next_page_number}}">Next</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{list_vids.paginator.num_pages}}">Last &raquo</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'main.html' %} 
+{% load static %} 
+{% block content %} 
+<nav class="navbar bg-light" style="top: 1%;">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold">{{num_reports}}</a>
+    <form class="d-flex" role="search" method="GET" action="{% url 'report:report_main' video_id%}"> {% csrf_token %}
+      <input class="form-control me-2" type="search" placeholder="Search or All" aria-label="Search" name="tv_search_report">
+      <button class="btn btn-outline-success" type="submit" name="btn_search_report" style="margin-left:5px;">Search</button>
+    </form>
+  </div>
+</nav>
+<table class="table table_report" style = "overflow-y:scroll; height:80vh">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">User ID</th>
+      <th scope="col">Report Content</th>
+      <th scope="col">Status</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    {% for report in list_res %}
+    <tr>
+      <td>{{report.report_id}}</td>
+      <td>{{report.uid}}</td>
+      <td>{{report.report_content}}</td>
+      <td>{{report.report_status}}</td>
+      <td>
+        <form action="{% url 'report:detail_report' report.report_id %}">
+          <input type="image" class="icon_report" src="{% static 'styles/images/edit.png' %}" />
+        </form>
+        
+      </td>
+      <td>
+        <input type="image" class="icon_report" src="{% static 'styles/images/delete.png' %}" data-bs-toggle="modal" data-bs-target="#modal{{report.report_id}}" class="icon_report" />
+          <div
+            class="modal fade"
+            id="modal{{report.report_id}}"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalCenterTitle"
+            aria-hidden="true"
+            
+          >
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="a{{report.report_id}}">
+                    Are you sure you want to delete?
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">The report {{report.id}} of user {{report.uid}}</div>
+                <div class="modal-footer">
+                  <form action="{% url 'report:delete_report' report.report_id %}"  method="POST"> {% csrf_token %}
+                  <button type="submit" class="btn btn-primary">Yes</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+      </td>
+    </tr>
+  </tbody>
+  {% endfor %} 
+</table>
+<nav aria-label="Page navigation example " style="margin-top: 10px;">
+  <ul class="pagination">
+    {% if list_res.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{list_res.previous_page_number}}">Previous</a></li>
+    {% endif %}
+    {% for i in nums %}
+    <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+    {% endfor %}
+    {% if list_res.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{list_res.next_page_number}}">Next</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{list_res.paginator.num_pages}}">Last &raquo</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endblock %}
+
+
